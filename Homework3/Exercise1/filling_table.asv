@@ -1,0 +1,101 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   Testing program on 4-5 grayscale images with different features (er.g. sharpness, grayscale levels,
+%   size of objects ,.... ). Completing of the following table for the considered images and reporting the
+%   number of components needed to get the different errors reported in the columns of the table:
+%   
+%   image | error< 1%  |  error < 5%  |  error< 10%  |
+%   --------------------------------------------------
+%    
+% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+clc;
+clear;
+
+%reading a grayscale image from 13 selected images
+for img=1:14
+    if img==7 || img==13
+        path = join(["D:\SMM\Homework3\Exercise1\images\", int2str(img), ".png"], '');
+    else
+        path = join(["D:\SMM\Homework3\Exercise1\images\", int2str(img), ".jpg"], '');
+    end
+    a = imread(path);
+    A = rgb2gray(a);
+    
+    [M,N] = size(A);
+    A = im2double(A);
+
+    %displaying image
+    figure('Name','Original Image','NumberTitle','off');
+    imagesc(A);
+    colormap gray;
+
+    %computing the Singular Value Decomposition of the image matrix A 
+    [U, S, V] = svd(A);
+    S_vector = svd(A);
+
+    %ploting the singular values
+    %figure(2);
+    %plot(S_vector,'r:*')
+
+    %approximating the matrix A with the matrix Ak 
+    %obtained by summing the k components of
+    %rank one associated with the largest singular values
+    ok_10 = true;
+    ok_5 = true;
+    ok_1 = true;
+    k_10 = 0;
+    k_5 = 0; 
+    k_1 = 0;
+    
+    k = min(M,N);
+    A_k = 0;
+    k_vector = zeros(k,1);
+    err_vector = zeros(k,1);
+    compression_factor_vector = zeros(k,1);
+    for i = 1 : k
+        A_k = A_k + U(:,i) * V(:,i)' *  S_vector(i);
+        k_vector(i,1) = i;
+        err_vector(i,1) = norm(A-A_k, 'fro') / norm(A, 'fro');
+        %checking if relative error have decreased enougth:
+        if err_vector(i,1) < 10 && ok_10
+            k_10 = k;
+            ok_10 = false;
+        end
+        if err_vector(i,1) < 5 && ok_5
+            k_5 = k;
+            ok_5 = false;
+        end
+        if err_vector(i,1) < 1 && ok_1
+            k_1 = k;
+            ok_1 = false;
+        end               
+        compression_factor_vector(i,1) = i * (1/M + 1/N);
+    end
+    %end
+
+    %Displaying the matrix Ak
+    figure('Name','Aproximated matrix (using largest singural values)','NumberTitle','off');
+    imagesc(A_k);
+    colormap gray;
+    
+    fprintf(['------------------------------------\n', ...
+        'For image %d with size(%d x %d) are needed: \n', ...
+        '    %d components for error < 1 \n', ...
+        '    %d components for error < 5 \n', ...
+        '    %d components for error < 10 \n', ...
+        '------------------------------------\n'], img, M, N, k_1, k_5, k_10);
+        
+    %Computing the relative error in the Frobenius norm 
+    %bewteen the exact and the approximated image.
+    %plotting:
+    figure(img);
+    subplot(1,2,1);
+    plot(k_vector, err_vector);
+    title('relative error in descreased case');
+    %computing the compression factor for an image of size m × n:
+    %plotting:
+    subplot(1,2,2);
+    plot(k_vector, compression_factor_vector);
+    title('compression factor');
+end

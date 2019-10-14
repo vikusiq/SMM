@@ -1,0 +1,6 @@
+%Computing the machine precision epsilon:
+%for single 
+and double precision, using its alternative definition:
+%fl(1 + ) > 1.
+%Tips:
+%Use a while structure. To set a single precision use the function single.

@@ -1,0 +1,125 @@
+format long e;
+clear;
+% Test 1
+j = 0;
+n_array = zeros(101,1);
+computational_time = zeros(101,1);
+relative_errors_array = zeros(101,1);
+conditioning_numbers_array = zeros(101,1);
+
+computational_time_pcg = zeros(101,1);
+relative_errors_array_pcg = zeros(101,1);
+
+for i = 10 : 50 : 1000    
+    j = j+1;      
+    %randomly generating input matrix A
+    A = randn(i);    
+    symmetric_positive_definite = A'*A;
+    n = size(symmetric_positive_definite);
+    x_exact_solution = ones(n(2),1);
+    b = A * x_exact_solution;    
+    x0 = randn(n(2),1);
+    
+    %aproximating solution with the Jacobi method
+    tic
+    [aproximated_x, necessary_iters] = jacobi(symmetric_positive_definite, b, x0, 1e-6, 100000); 
+    computational_time(j) = toc;
+    
+    %aproximating solution with the Conjugate Gradient method
+    tic
+    aproximated_x_pcg = pcg(symmetric_positive_definite, b);
+    computational_time_pcg(j) = toc;
+        
+    n_array(j) = i;
+    conditioning_number = cond(symmetric_positive_definite); 
+    conditioning_numbers_array(j) = conditioning_number;
+
+    relative_errors_array(j) = norm(x_exact_solution - aproximated_x) / norm(x_exact_solution);
+    relative_errors_array_pcg(j) = norm(x_exact_solution - aproximated_x_pcg) / norm(x_exact_solution);    
+end
+
+figure(1)
+subplot(3,2,1)
+plot(n_array, conditioning_numbers_array, 'b')
+title('Conditioning numbers (Jacobi/symmetric matrix)')
+
+subplot(3,2,3)
+loglog(n_array, relative_errors_array, 'r')
+title('Relative errors (Jacobi/symmetric matrix)')
+
+subplot(3,2,4)
+loglog(n_array,computational_time , 'g')
+title('Computational time (Jacobi/symmetric matrix)')
+
+subplot(3,2,5)
+loglog(n_array, relative_errors_array_pcg, 'r')
+title('Relative errors (Conjugate Gradient/symmetric matrix)')
+
+subplot(3,2,6)
+loglog(n_array, computational_time_pcg, 'g')
+title('Computational time (Conjugate Gradient/symmetric matrix)')
+
+%Test 2
+%Testing method with the tridiagonal matrix
+% T =
+%        5 ?1 ?1 0   .... . .0
+%        ?1 5 ?1 ?1  .... .  0
+%        ?1 ?1 5 ?1 ?1 .  . 0
+%        . . . . . . . . . ...
+%        0 . .  . 0 0 ?1 ?1 5
+% of size n = 50 : 100 : 5000.
+%Store only the nonzero elements of the matrix.
+j = 0;
+n_array2 = zeros(50,1);
+conditioning_numbers_array2 = zeros(50,1);
+computational_time2 = zeros(50,1);
+relative_errors_array2 = zeros(50,1);
+
+computational_time_pcg2 = zeros(50,1);
+relative_errors_array_pcg2 = zeros(50,1);
+
+for i = 50 : 100 : 1000 
+    j = j + 1;
+    T =  diag(ones(i,1) + 4) + diag(ones(i-1,1)-2,1) + diag(ones(i-1,1)-2,-1);
+    n = size(T);
+    x_exact_solution = ones(n(2),1);
+    b = T * x_exact_solution;    
+    x0 = randn(n(2),1);
+    
+    conditioning_numbers_array2(j) = cond(T);
+    
+    %aproximating solution with the Jacobi method
+    tic
+    [aproximated_x, necessary_iters] = jacobi(T, b, x0, 1e-6, 100000);  
+    computational_time2(j) = toc;
+    
+    %aproximating solution with the Conjugate Gradient method
+    tic
+    aproximated_x_pcg = pcg(T, b);
+    computational_time_pcg2(j) = toc;
+    
+    n_array2(j) = i;
+    relative_errors_array2(j) = norm(x_exact_solution - aproximated_x) / norm(x_exact_solution);
+    relative_errors_array_pcg2(j) = norm(x_exact_solution - aproximated_x_pcg) / norm(x_exact_solution);
+end
+
+figure(2)
+subplot(3,2,1)
+plot(n_array2, conditioning_numbers_array2, 'b')
+title('Conditioning numbers (Jacobi/tridiagonal matrix)')
+
+subplot(3,2,3)
+loglog(n_array2, relative_errors_array2, 'r')
+title('Relative errors (Jacobi/tridiagonal matrix)')
+
+subplot(3,2,4)
+loglog(n_array2,computational_time2 , 'g')
+title('Computational time (Jacobi/tridiagonal matrix)')
+
+subplot(3,2,5)
+loglog(n_array2, relative_errors_array_pcg2, 'r')
+title('Relative errors (Conjugate Gradient/tridiagonal matrix)')
+
+subplot(3,2,6)
+loglog(n_array2, computational_time_pcg2, 'g')
+title('Computational time (Conjugate Gradient/tridiagonal matrix)')

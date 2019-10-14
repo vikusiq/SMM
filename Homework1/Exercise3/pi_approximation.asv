@@ -1,0 +1,31 @@
+%Truncation error in ? approximation. In mathematics, the Leibnitz formula for ?, states that:
+%It is obtained using Taylor formula for the tan?1 setting x = 1 since arctan(1) = ? / 4
+%Fix n ? N and compute the approximation of ? using Leibnitz formula 
+%truncated at n-th term. Compare the result with the true value of ?.
+clear;
+clc;
+approximated_pi = 0;
+n=1000;
+for k = 0 : n
+   approximated_pi = approximated_pi + 4 * (-1)^k / (2*k +1) ; 
+   fprintf('k = %i: approximated pi = %1.80f \n ', k, approximated_pi);
+   k_values(k+1) = k;
+   absolute_error(k+1) = abs(pi-approximated_pi);
+   relative_error(k+1) = absolute_error(k+1) / abs(pi);
+    
+end
+sublot()
+plot(k_values, relative_error);
+
+
+
+
+%clear
+%clc
+%p = 0; % Start at 0
+%i = 0;
+%while 1 == 1 % Infinite loop
+%   p = p + (4*((-1)^i))/(2*i + 1); % The Leibniz formula for pi: http://en.wikipedia.org/wiki/Leibniz_formula_for_pi
+%   fprintf('%7i Iterations: Pi is approximately equal to %1.16f...\n',i+1,p) % Display of the approximation after each iteration
+%   i = i + 1;
+%end

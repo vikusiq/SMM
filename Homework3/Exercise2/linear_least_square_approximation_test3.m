@@ -1,0 +1,68 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   Linear least-squares for data approximation.
+%   Given the least-squares problem: min||Ax ? b||^2
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+clear;
+clc;
+
+%Test 1
+x = [150000; 300000; 450000; 600000; 750000; 
+    900000;1050000 ; 1200000;1350000; 
+    1500000;1650000 ; 1800000;1950000 ;2100000 ;
+    2250000 ;2400000 ;2550000 ;2700000 ;
+    2850000 ;3000000 ;150000 ;300000 ;
+    450000;600000 ;750000 ; 900000; 1050000; 1200000; 1350000; 1500000;
+    1650000 ; 1800000;1950000 ;2100000 ; 2250000; 2400000;2550000 ; 2700000; 2850000; 3000000];
+b = [.11019; .21956; .21956;.43899;  
+    .54803 ; .65694; .76562;.87487 ; 
+    .98292 ;1.09146 ;1.20001 ;  
+    1.30822;1.41599 ; 1.52399;1.63194 ;1.73947 ;1.84646 ; 
+    1.95392;2.06128 ;  2.16844; .11052;.22018 ;.32939 ; 
+    .43886; .54798;.65739 ;.76596 ;.87474;.98300 ; 1.09150; 1.20004; 
+    1.30818;1.41613 ;1.52408 ; 1.63159; 1.73965;  1.84696  ; 1.95445 ; 2.06177 ; 2.16829 ];
+                 
+                                          
+               
+ 
+[M,N] = size(x);
+
+A = [ones(M,1), x, x.^2, x.^3, x.^4];
+%Computing and displaying the matrix condition number
+condition_number = cond(A)
+
+%computeing solution with the normal equations
+%computation of A'A may be affected by a loss of significant
+%digits, with a consequent loss of the positive definiteness of the matrix itself.
+x_cholescky = inv(A'*A)*A'*b;
+
+%computeing solution by using the pseudoinverse of A
+psudo_solution_x =  pinv(A)*b;
+
+%[Q,R]=qr(A);
+%Qt=Q(: ,1:2); Rt=R(1:2 ,:);
+%xstar = Rt \ (Qt'*b)
+
+%GIven a data set of m data (xi, yi), i = 1, . . . m, 
+%determine the least-squares polynomial approximation of degree n = 1, . . . 5 of the data
+
+for i = 1 : 5
+    p = polyfit(x,b,i);
+    f = polyval(p,x);
+    subplot(2,3,i)
+    plot(x,b,'o', x,f,'-')
+    title(join(["Least-Squares Polynomial Approximation of degree =", int2str(i)]))
+    legend('data','linear fit')
+    
+    %Compute the R2 value:
+    miu = mean(b);
+    s0 = 0;
+    s1 = 0;
+    for j = 1 : M
+        s0 = s0 + (b(j) - f(j))^2;
+        s1 = s1 + (b(j) - miu)^2;   
+    end
+    R_squarded = 1 - (s0/s1);
+    fprintf(["R2 value for Least-Squares Polynomial Approximation of degree %i is equal to %2.16f\n"],i , R_squarded);
+    
+end
+

@@ -32,12 +32,27 @@ psudo_solution_x =  pinv(A)*b;
 %GIven a data set of m data (xi, yi), i = 1, . . . m, 
 %determine the least-squares polynomial approximation of degree n = 1, . . . 5 of the data
 
-for i = 1 : 5
+for i = 2 : 5
+    A = ones(M,1);
+    for k = 2 : i
+        A = [x.^(k-1), A ];        
+    end
+    
+    psudo_solution_x =  pinv(A)*b;
+    f_pseudo = polyval(psudo_solution_x,x);
+    figure(1);
+    subplot(2,3,i-1)
+    plot(x,b,'o', x,f_pseudo,'-')
+    title(join(["Least-Squares Polynomial Approximation of degree =", int2str(i)]))
+    legend('data','linear fit')
+    % A = [ones(M,1, )x, x.^2, x.^3, x.^4];
+    
     p = polyfit(x,b,i);
     f = polyval(p,x);
-    subplot(2,3,i)
+    figure(2);
+    subplot(2,3,i-1)
     plot(x,b,'o', x,f,'-')
-    title(join(["Least-Squares Polynomial Approximation of degree =", int2str(i)]))
+    title(join(["Using Polyfit: Least-Squares Polynomial Approximation of degree =", int2str(i)]))
     legend('data','linear fit')
     
     %Compute the R2 value:

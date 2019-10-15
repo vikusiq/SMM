@@ -15,7 +15,7 @@ b = [1.18; 1.26; 1.23; 1.37; 1.37;
 
 A = [ones(M,1), x, x.^2, x.^3, x.^4];
 %Computing and displaying the matrix condition number
-condition_number = cond(A);
+condition_number = cond(A)
 
 %computeing solution with the normal equations
 %computation of A'A may be affected by a loss of significant
@@ -32,12 +32,26 @@ psudo_solution_x =  pinv(A)*b;
 %GIven a data set of m data (xi, yi), i = 1, . . . m, 
 %determine the least-squares polynomial approximation of degree n = 1, . . . 5 of the data
 
-for i = 1 : 5
-    p = polyfit(x,b,i);
-    f = polyval(p,x);
-    subplot(2,3,i)
+for i = 2 : 5
+    A = ones(M,1);
+    for k = 2 : i
+        A = [A, x.^(k-1)];        
+    end
+    psudo_solution_x =  pinv(A)*b;
+    f = polyval(psudo_solution_x,x);
+    figure(1);
+    subplot(2,3,i-1)
     plot(x,b,'o', x,f,'-')
-    title(join(["Least-squares polynomial approximation of degree =", int2str(i)]))
+    title(join(["Least-Squares Polynomial Approximation of degree =", int2str(i)]))
+    legend('data','linear fit')
+    % A = [ones(M,1, )x, x.^2, x.^3, x.^4];
+    
+    p = polyfit(x,b,i)
+    f = polyval(p,x);
+    figure(2);
+    subplot(2,3,i-1)
+    plot(x,b,'o', x,f,'-')
+    title(join(["Using Polyfit: Least-Squares Polynomial Approximation of degree =", int2str(i)]))
     legend('data','linear fit')
     
     %Compute the R2 value:
@@ -48,15 +62,8 @@ for i = 1 : 5
         s0 = s0 + (b(j) - f(j))^2;
         s1 = s1 + (b(j) - miu)^2;   
     end
-    R_squarded = 1 - (s0/s1)
-    fprintf([], )
+    R_squarded = 1 - (s0/s1);
+    fprintf(["R2 value for Least-Squares Polynomial Approximation of degree %i is equal to %2.16f\n"],i , R_squarded);
     
 end
-
-
-
-
-
-
-
 

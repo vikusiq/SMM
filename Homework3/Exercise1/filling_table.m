@@ -15,9 +15,9 @@ clear;
 %reading a grayscale image from 13 selected images
 for img=1:14
     if img==7 || img==8
-        path = join(["D:\SMM\Homework3\Exercise1\images\", int2str(img), ".png"], '');
+        path = join(["D:\SMM_repo\SMM\Homework3\Exercise1\images\", int2str(img), ".png"], '');
     else
-        path = join(["D:\SMM\Homework3\Exercise1\images\", int2str(img), ".jpg"], '');
+        path = join(["D:\SMM_repo\SMM\Homework3\Exercise1\images\", int2str(img), ".jpg"], '');
     end
     a = imread(path);
     A = rgb2gray(a);

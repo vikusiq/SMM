@@ -7,9 +7,9 @@
 clear;
 clc; 
 
-x0 = [10,10];
+x0 = [0;0;0];
 tol = 1e-5;
 kmax = 1e5;
-%[xk, k, fxk, vecf, vecg, exit_cond] = gradiend_method(x0,@rosenbr, tol, kmax);
+%[xk, k, fxk, vecf, vecg, exit_cond] = gradiend_method(x0,@quadratic_convex, tol, kmax);
 
-[xk, k, fxk, vecf, vecg, exit_cond] = newton_method(x0,@rosenbr, tol, kmax);
+[xk, k, fxk, vecf, vecg, exit_cond] = newton_method(x0,@quadratic_convex, tol, kmax);

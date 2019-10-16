@@ -5,7 +5,8 @@ function [fxk, gxk, Hxk] = rosenbr(xk)
 % xk = scalar/vector in which the computation will be performed
 % OUTPUT:
 % fxk = computed value of the function in xk
-% gxk = computed value of the gradiend og thr function in xk
+% gxk = computed value of the gradiend of the function in xk
+% Hkh = Hessian matrix of the function
 
 fxk = 100*(xk(2) - xk(1)^2)^2 + (1 - xk(1))^2;
 

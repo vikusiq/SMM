@@ -14,10 +14,10 @@ shading interp
 figure;
 contour(X,Y,Z, 20); % or last argument can be an vector with desired values(in order to show values of the function in these points)
 figure;
-contourf(X,Y,Z, 500); % or last argument can be an vector with desired values(in order to show values of the function in these points)
+contourf(X,Y,Z, 20); % or last argument can be an vector with desired values(in order to show values of the function in these points)
 
 
 %[x,y] = meshgrid(-2:.2:2, -2:.2:2);
 %z = x .* exp(-x.^2 - y.^2);
-%[px,py] = gradient(z,.2,.2);
-%contour(z), hold on, quiver(px,py), hold off
+[px,py] = gradient(z,.2,.2);
+contour(z), hold on, quiver(px,py), hold off

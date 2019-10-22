@@ -1,0 +1,50 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%           Nonlinear regression - Nonlinear least squares
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Simulate 200 data from the following nonlinear function:
+% f(x) = a1*exp(-x/a2) + a3exp(-xa4)
+% with:   a1 = 4; a2 = 2; a3 = 1; a4 = 10. 
+clear;
+clc;
+a1 = 4; 
+a2 = 2; 
+a3 = 1; 
+a4 = 10;
+x = linspace(-2, 2, 500);               % computing 200 equally spaced abscisa points
+f = a1.*exp(-x./a2) + a3.*exp(-x./a4);  % computing value of the function in these points
+subplot(2,2,1)
+plot(x,f);
+title('200 computed data from nonlinear function f:')
+
+% Adding 10% of white gaussian noise (y=y+0.1*randn(size(y))).
+y = f + 0.1 * randn(size(f));
+subplot(2,2,2);
+plot(x,y);
+title('nonlinear function with gaussian noise')
+
+% estimating parameters a1,a2,a3,a4 that 
+% minimize: min||yi - f(x1/a)|| = min||r(a)||
+fun = @(a)a(1).*exp(-x./a(2)) + a(3).*exp(-x./a(4)) - y; % 
+x0 = [3,1,2,7];
+options = optimoptions(@lsqnonlin,'Algorithm','levenberg-marquardt');
+
+a = lsqnonlin(fun, x0, [], [], options)
+
+subplot(2,2,2)
+plot(x,y,'ko',x,f,'b-')
+legend('Data with noise','Initial function')
+
+
+f_ = a(1).*exp(-x./a(2)) + a(3).*exp(-x./a4);
+
+subplot(2,2,3);
+plot(x,y,'ko',x,f_,'b-')
+legend('Data with noise','estimated function')
+
+
+%   Use the lsqnonlin Matlab function of the Optimization Toolobox 
+%   (choose the option for using the use the Levenberg-Marquardt algorithm ) 
+%   to solve the nonlinear least squares regression with the function f(x) . 
+%   Discuss the rsults obtained in terms of relative error by varying the initial guess 
+%   (a first proposal is the vector [3; 1; 2; 7]) and the input tolerances

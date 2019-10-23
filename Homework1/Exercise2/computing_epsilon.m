@@ -1,6 +1,10 @@
-%Computing the machine precision epsilon, using its alternative definition: fl(1 + epsilon) > 1
-%for single precision:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   Computing the machine precision epsilon
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% using its alternative definition: fl(1 + epsilon) > 1
+% for single precision:
 clear;
+clc;
 x = 1;
 i = 1;
 x_single_values = zeros(20, 1);

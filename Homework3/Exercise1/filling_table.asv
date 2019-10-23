@@ -14,10 +14,10 @@ clear;
 
 %reading a grayscale image from 13 selected images
 for img=1:14
-    if img==7 || img==13
-        path = join(["D:\SMM\Homework3\Exercise1\images\", int2str(img), ".png"], '');
+    if img==7 || img==8
+        path = join(["D:\SMM_repo\SMM\Homework3\Exercise1\images\", int2str(img), ".png"], '');
     else
-        path = join(["D:\SMM\Homework3\Exercise1\images\", int2str(img), ".jpg"], '');
+        path = join(["D:\SMM_repo\SMM\Homework3\Exercise1\images\", int2str(img), ".jpg"], '');
     end
     a = imread(path);
     A = rgb2gray(a);
@@ -26,9 +26,9 @@ for img=1:14
     A = im2double(A);
 
     %displaying image
-    figure('Name','Original Image','NumberTitle','off');
-    imagesc(A);
-    colormap gray;
+    %figure('Name','Original Image','NumberTitle','off');
+    %imagesc(A);
+    %colormap gray;
 
     %computing the Singular Value Decomposition of the image matrix A 
     [U, S, V] = svd(A);
@@ -58,16 +58,16 @@ for img=1:14
         k_vector(i,1) = i;
         err_vector(i,1) = norm(A-A_k, 'fro') / norm(A, 'fro');
         %checking if relative error have decreased enougth:
-        if err_vector(i,1) < 10 && ok_10
-            k_10 = k;
+        if err_vector(i,1) < 0.10 && ok_10
+            k_10 = i;
             ok_10 = false;
         end
-        if err_vector(i,1) < 5 && ok_5
-            k_5 = k;
+        if err_vector(i,1) < 0.05 && ok_5
+            k_5 = i;
             ok_5 = false;
         end
-        if err_vector(i,1) < 1 && ok_1
-            k_1 = k;
+        if err_vector(i,1) < 0.01 && ok_1
+            k_1 = i;
             ok_1 = false;
         end               
         compression_factor_vector(i,1) = i * (1/M + 1/N);
@@ -75,9 +75,9 @@ for img=1:14
     %end
 
     %Displaying the matrix Ak
-    figure('Name','Aproximated matrix (using largest singural values)','NumberTitle','off');
-    imagesc(A_k);
-    colormap gray;
+    %figure('Name','Aproximated matrix (using largest singural values)','NumberTitle','off');
+    %imagesc(A_k);
+    %colormap gray;
     
     fprintf(['------------------------------------\n', ...
         'For image %d with size(%d x %d) are needed: \n', ...
@@ -90,7 +90,7 @@ for img=1:14
     %bewteen the exact and the approximated image.
     %plotting:
     figure(img);
-    subplot(1,2,1);
+    subplot(7,2,1);
     plot(k_vector, err_vector);
     title('relative error in descreased case');
     %computing the compression factor for an image of size m × n:

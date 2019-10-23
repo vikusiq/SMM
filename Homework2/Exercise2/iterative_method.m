@@ -2,13 +2,13 @@ format long e;
 clear;
 % Test 1
 j = 0;
-n_array = zeros(101,1);
-computational_time = zeros(101,1);
-relative_errors_array = zeros(101,1);
-conditioning_numbers_array = zeros(101,1);
+n_array = zeros(10,1);
+computational_time = zeros(10,1);
+relative_errors_array = zeros(10,1);
+conditioning_numbers_array = zeros(10,1);
 
-computational_time_pcg = zeros(101,1);
-relative_errors_array_pcg = zeros(101,1);
+computational_time_pcg = zeros(10,1);
+relative_errors_array_pcg = zeros(10,1);
 
 for i = 10 : 50 : 1000    
     j = j+1;      
@@ -40,7 +40,7 @@ end
 
 figure(1)
 subplot(3,2,1)
-plot(n_array, conditioning_numbers_array, 'b')
+plot(n_array, conditioning_numbers_array, 'b*-')
 title('Conditioning numbers (Jacobi/symmetric matrix)')
 
 subplot(3,2,3)
@@ -70,13 +70,13 @@ title('Computational time (Conjugate Gradient/symmetric matrix)')
 % of size n = 50 : 100 : 5000.
 %Store only the nonzero elements of the matrix.
 j = 0;
-n_array2 = zeros(50,1);
-conditioning_numbers_array2 = zeros(50,1);
-computational_time2 = zeros(50,1);
-relative_errors_array2 = zeros(50,1);
+n_array2 = zeros(10,1);
+conditioning_numbers_array2 = zeros(10,1);
+computational_time2 = zeros(10,1);
+relative_errors_array2 = zeros(10,1);
 
-computational_time_pcg2 = zeros(50,1);
-relative_errors_array_pcg2 = zeros(50,1);
+computational_time_pcg2 = zeros(10,1);
+relative_errors_array_pcg2 = zeros(10,1);
 
 for i = 50 : 100 : 1000 
     j = j + 1;
@@ -105,7 +105,7 @@ end
 
 figure(2)
 subplot(3,2,1)
-plot(n_array2, conditioning_numbers_array2, 'b')
+plot(n_array2, conditioning_numbers_array2, 'b*-')
 title('Conditioning numbers (Jacobi/tridiagonal matrix)')
 
 subplot(3,2,3)

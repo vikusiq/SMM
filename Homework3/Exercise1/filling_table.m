@@ -89,13 +89,13 @@ for img=1:14
     %Computing the relative error in the Frobenius norm 
     %bewteen the exact and the approximated image.
     %plotting:
-    figure(img);
-    subplot(1,2,1);
+    figure(1);
+    subplot(2,14,img);
     plot(k_vector, err_vector);
-    title('relative error in descreased case');
+    title('relative error');
     %computing the compression factor for an image of size m × n:
     %plotting:
-    subplot(1,2,2);
+    subplot(2,14,img+14);
     plot(k_vector, compression_factor_vector);
     title('compression factor');
 end

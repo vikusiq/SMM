@@ -1,2 +1,2 @@
 # SMM
-Repository for "Statistical and Mathematical Methods" Course
+Statistical and Mathematical Methods for Artificial Intelligence Laboratory Exercises!
